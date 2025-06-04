@@ -89,30 +89,30 @@ export const listenForMessages = (chatId, setMessages) => {
 };
 
 // Function to update user images (Note, we did not use this function in the project tutorial)
-// export async function updateUsersImages() {
-//     // Step 1: Fetch the users collection from Firestore
-//     const usersRef = collection(db, "users");
-//     const querySnapshot = await getDocs(usersRef);
+export async function updateUsersImages() {
+  // Step 1: Fetch the users collection from Firestore
+  const usersRef = collection(db, "users");
+  const querySnapshot = await getDocs(usersRef);
 
-//     // Step 2: Loop through the users and update the image field using `for...of`
-//     let index = 1; // Start with img=1
+  // Step 2: Loop through the users and update the image field using `for...of`
+  let index = 1; // Start with img=1
 
-//     // Use a for...of loop to handle async calls sequentially
-//     for (const docSnapshot of querySnapshot.docs) {
-//         const userDoc = doc(db, "users", docSnapshot.id);
+  // Use a for...of loop to handle async calls sequentially
+  for (const docSnapshot of querySnapshot.docs) {
+    const userDoc = doc(db, "users", docSnapshot.id);
 
-//         // Construct the new image URL
-//         const imageUrl = `https://i.pravatar.cc/150?img=${index}`;
+    // Construct the new image URL
+    const imageUrl = `https://i.pravatar.cc/150?img=${index}`;
 
-//         // Step 3: Update the user document with the new image URL
-//         await updateDoc(userDoc, {
-//             image: imageUrl, // assuming 'image' is the field to update
-//         });
+    // Step 3: Update the user document with the new image URL
+    await updateDoc(userDoc, {
+      image: imageUrl, // assuming 'image' is the field to update
+    });
 
-//         index++; // Increment the image number for the next user
-//     }
+    index++; // Increment the image number for the next user
+  }
 
-//     console.log("All user images updated successfully!");
-// }
+  console.log("All user images updated successfully!");
+}
 
 export { auth, db };
