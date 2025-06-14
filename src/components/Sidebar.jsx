@@ -41,7 +41,7 @@ const Sidebar = () => {
 
           {/* Section discussion */}
           <div className="">
-            <ul className="space-y-2 flex-1 h-96 overflow-auto scrollbar-invisible">
+            <ul className="space-y-2 flex-1 h-96 overflow-auto custom-scrollbar">
               <li className="flex flex-col gap-2">
                 {ListDiscussion.map((discussion) => (
                   <div
