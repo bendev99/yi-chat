@@ -1,40 +1,26 @@
-import React, { useState, useEffect } from "react";
-import Login from "./components/Login";
-import Register from "./components/Register";
-import Navlinks from "./components/Navlinks";
-import Chatbox from "./components/Chatbox";
-import Chatlist from "./components/Chatlist";
-import { auth } from "./firebase/firebase";
+import { Routes, Route } from "react-router-dom";
+import Register from "./pages/Register";
+import Home from "./pages/Home";
+import Login from "./pages/Login";
+import Welcome from "./pages/Welcome";
+import MainLayout from "./layout/Layout";
 
 const App = () => {
-    const [isLogin, setIsLogin] = useState(true);
-    const [user, setUser] = useState(null);
-    const [selectedUser, setSelectedUser] = useState(null);
-    useEffect(() => {
-        const currentUser = auth.currentUser;
-        if (currentUser) {
-            setUser(currentUser);
-        }
+  return (
+    <div>
+      <Routes>
+        <Route path="/" element={<Welcome />} />
 
-        const unsubscribe = auth.onAuthStateChanged((user) => {
-            setUser(user);
-        });
+        <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Register />} />
 
-        return () => unsubscribe();
-    }, []);
-    return (
-        <div>
-            {user ? (
-                <div className="flex lg:flex-row flex-col items-start w-[100%]">
-                    <Navlinks />
-                    <Chatlist setSelectedUser={setSelectedUser} />
-                    <Chatbox selectedUser={selectedUser} />
-                </div>
-            ) : (
-                <div>{isLogin ? <Login isLogin={isLogin} setIsLogin={setIsLogin} /> : <Register isLogin={isLogin} setIsLogin={setIsLogin} />}</div>
-            )}
-        </div>
-    );
+        {/* Layout avec sidebar */}
+        <Route element={<MainLayout />}>
+          <Route path="/home" element={<Home />} />
+        </Route>
+      </Routes>
+    </div>
+  );
 };
 
 export default App;
