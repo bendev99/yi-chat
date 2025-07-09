@@ -1,17 +1,57 @@
-# Real-Time Chat Application (FB Messenger) with React, Tailwind CSS, and Firebase.
+# Application de messagerie en ligne développée avec ReactJS, TailwindCSS, Express, NodeJS et MongoDB
 
-This real-time chat application leverages the power of **React**, **Tailwind CSS**, and **Firebase** to deliver a seamless, modern, and responsive messaging experience. The app allows users to sign up, log in, and instantly chat with others in real time, making it ideal for building communication platforms such as team chat apps, social messaging apps, or customer support systems.
+Cette application de chat en temps réel utilise la puissance de **React**, **Tailwind CSS**, **Express** et **MongoDB** pour offrir une expérience de messagerie moderne, fluide et responsive. Les utilisateurs peuvent s'inscrire, se connecter et discuter instantanément avec d'autres membres, ce qui en fait une solution idéale pour créer des plateformes de communication (chat d'équipe, messagerie sociale, support client, etc.).
 
-### **Key Features:**
+## **Fonctionnalités**
 
--   **Authentication:** Secure user authentication via **Firebase Authentication**, with options for email/password login or social media logins (e.g., Google, Facebook).
--   **Real-Time Messaging:** Using **Firebase Firestore**, chat messages are synchronized in real time across all users, ensuring a fluid and interactive messaging experience.
--   **Responsive UI:** Styled with **Tailwind CSS**, the app offers a clean and responsive design, ensuring it works seamlessly across all devices.
--   **User-friendly Interface:** Simple and intuitive chat UI with message input, chat window, and user presence indicators, all powered by React components.
--   **Scalable & Secure:** Powered by Firebase, the app handles scaling automatically and includes built-in security for user authentication and data storage.
+- **Authentification sécurisée** : Authentification des utilisateurs via **Express** et **MongoDB** avec gestion des comptes par email et mot de passe.
+- **Messagerie texte en temps réel** : Les messages sont synchronisés instantanément entre tous les utilisateurs connectés.
+- **Interface responsive** : Grâce à **Tailwind CSS**, l'application s'adapte à tous les écrans pour une expérience optimale sur mobile, tablette et ordinateur.
+- **Interface intuitive** : UI simple et conviviale avec zone de saisie, fenêtre de chat et indicateurs de présence des utilisateurs.
+- **Sécurité & évolutivité** : Les données utilisateurs et messages sont stockés de manière sécurisée dans MongoDB.
 
-This project is a great choice for anyone looking to build a real-time, full-stack chat application with minimal backend management while maintaining a high level of flexibility and customization.
+## **Installation et lancement**
 
-# Youtube Tutorial
-[Watch Youtube Tutorial](https://youtu.be/Y7wbzq1j9g0?si=Y52--e2js_yvRCF1)
-# koragna
+1. **Cloner le projet**
+
+   ```bash
+   git clone https://github.com/nasolo99/koragna.git
+   cd koragna
+   ```
+
+2. **Configurer les variables d'environnement**
+
+   - Créez un fichier `.env` à la dossier racine et renseignez vos identifiants MongoDB et la clé secrète JWT.
+
+3. **Installer les dépendances**
+
+   - Pour le backend :
+     ```bash
+     npm install
+     ```
+   - Pour le frontend :
+     ```bash
+     cd frontend
+     npm install
+     ```
+
+4. **Lancer le serveur backend**
+
+   ```bash
+   npm run server
+   ```
+
+5. **Lancer le serveur frontend**
+   ```bash
+   npm run dev
+   ```
+
+## **Technologies utilisées**
+
+- **Frontend** : React, Tailwind CSS
+- **Backend** : Express, Node.js, MongoDB (Mongoose)
+- **Authentification** : JWT
+
+---
+
+Ce projet est idéal pour apprendre à construire une application de chat temps réel full-stack moderne
