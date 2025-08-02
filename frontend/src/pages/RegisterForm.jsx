@@ -1,6 +1,5 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Link, useNavigate } from "react-router-dom";
 import {
   AtSymbolIcon,
   EyeIcon,
@@ -9,7 +8,10 @@ import {
   PhoneIcon,
   UserIcon,
 } from "@heroicons/react/16/solid";
-import Login from "./LoginForm";
+import GenderChoose from "../components/GenderChoose";
+import useRegister from "../hooks/useRegister";
+import { useNavigate } from "react-router-dom";
+import { useAuthContext } from "../context/AuthContext";
 
 const Register = ({ isOpen, onClose }) => {
   const [formData, setFormData] = useState({
@@ -18,6 +20,7 @@ const Register = ({ isOpen, onClose }) => {
     phone: "",
     password: "",
     confirmPassword: "",
+    gender: "",
   });
   const [errors, setErrors] = useState({
     name: "",
@@ -30,13 +33,13 @@ const Register = ({ isOpen, onClose }) => {
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   const navigate = useNavigate();
+  const { authUser } = useAuthContext();
 
-  const handlePassword = () => {
-    setShowPassword(!showPassword);
-  };
-  const handleConfirmPassword = () => {
-    setShowConfirmPassword(!showConfirmPassword);
-  };
+  useEffect(() => {
+    if (authUser) {
+      navigate("/home");
+    }
+  }, [authUser, navigate]);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -127,64 +130,16 @@ const Register = ({ isOpen, onClose }) => {
     }
   };
 
-  const handleSubmit = (e) => {
+  const handleChekChange = (gender) => {
+    setFormData({ ...formData, gender });
+  };
+
+  const { loading, signup } = useRegister();
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    const newErrors = {};
 
-    // Validation du nom
-    if (!formData.name.trim()) {
-      newErrors.name = "Le nom est requis";
-    } else if (formData.name.length < 4) {
-      newErrors.name = "Le nom doit contenir au moins 4 caractères";
-    } else if (!/^[A-Za-zÀ-ÿ\s'-]{4,60}$/.test(formData.name)) {
-      newErrors.name =
-        "Le nom ne peut contenir que des lettres, espaces, apostrophes ou tirets";
-    }
-
-    // Validation de l'email
-    if (!formData.email.trim()) {
-      newErrors.email = "L'email est requis";
-    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
-      newErrors.email = "Entrer une adresse email valide";
-    }
-
-    // Validation du téléphone
-    if (!formData.phone.trim()) {
-      newErrors.phone = "Le numéro de téléphone est requis";
-    } else if (!/^[0-9]{10}$/.test(formData.phone)) {
-      newErrors.phone = "Entrer un numéro de téléphone valide (10 chiffres)";
-    }
-
-    // Validation du mot de passe
-    if (!formData.password.trim()) {
-      newErrors.password = "Le mot de passe est requis";
-    } else if (formData.password.length < 6) {
-      newErrors.password =
-        "Le mot de passe doit contenir au moins 6 caractères";
-    }
-
-    // Validation de la confirmation du mot de passe
-    if (!formData.confirmPassword.trim()) {
-      newErrors.confirmPassword = "La confirmation du mot de passe est requise";
-    } else if (formData.confirmPassword !== formData.password) {
-      newErrors.confirmPassword = "Les mots de passe ne correspondent pas";
-    }
-
-    setErrors(newErrors);
-
-    // Si aucune erreur, soumettre et naviguer
-    if (Object.keys(newErrors).length === 0) {
-      console.log("Inscription réussie:", formData);
-      setFormData({
-        name: "",
-        email: "",
-        phone: "",
-        password: "",
-        confirmPassword: "",
-      });
-      setErrors({});
-      navigate("/home");
-    }
+    await signup(formData);
   };
 
   const handleCancel = () => {
@@ -194,6 +149,7 @@ const Register = ({ isOpen, onClose }) => {
       phone: "",
       password: "",
       confirmPassword: "",
+      gender: "",
     });
     setErrors({
       name: "",
@@ -265,7 +221,7 @@ const Register = ({ isOpen, onClose }) => {
                     onChange={handleInputChange}
                     required
                     placeholder="Entrer votre nom"
-                    pattern="[A-Za-zÀ-ÿ\s'-]*"
+                    pattern="[A-Za-zÀ-ÿ' -]*"
                     minLength="4"
                     maxLength="60"
                     title="Seulement des lettres (y compris accentuées), espaces, apostrophes ou tirets (4-60 caractères)"
@@ -404,30 +360,15 @@ const Register = ({ isOpen, onClose }) => {
               </div>
 
               {/* CHECK BOX */}
-              <div className="flex items-center mx-3 gap-15">
-                <div className="form-control">
-                  <label className={`label gap-2 cursor-pointer`}>
-                    <input
-                      type="checkbox"
-                      className="checkbox border-gray-500"
-                    />
-                    <span className="label-text">Male</span>
-                  </label>
-                </div>
-                <div className="form-control">
-                  <label className={`label gap-2 cursor-pointer`}>
-                    <input
-                      type="checkbox"
-                      className="checkbox border-gray-500"
-                    />
-                    <span className="label-text">Male</span>
-                  </label>
-                </div>
-              </div>
+              <GenderChoose
+                onCheckChange={handleChekChange}
+                selectedGender={formData.gender}
+              />
 
+              {/* BOUTTON SOUMMISSION */}
               <div className="flex justify-end space-x-4 mt-6">
                 <motion.button
-                  className="btn bg-base-300 text-base-content"
+                  className="btn bg-base-300 text-base-content w-[30%]"
                   onClick={handleCancel}
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
@@ -435,12 +376,16 @@ const Register = ({ isOpen, onClose }) => {
                   Annuler
                 </motion.button>
                 <motion.button
-                  className="btn btn-primary bg-base-300 text-base-content"
+                  className="btn btn-primary bg-base-300 text-base-content w-[30%]"
                   onClick={handleSubmit}
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
                 >
-                  Inscription
+                  {loading ? (
+                    <span className="loading loading-spinner"></span>
+                  ) : (
+                    "Inscription"
+                  )}
                 </motion.button>
               </div>
             </div>
