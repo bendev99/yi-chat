@@ -1,9 +1,9 @@
 import { Routes, Route } from "react-router-dom";
-import Register from "./pages/Register";
-import Home from "./pages/Home";
-import Login from "./pages/Login";
 import Welcome from "./pages/Welcome";
-import MainLayout from "./layout/Layout";
+import Contact from "./pages/Contact";
+import Login from "./pages/LoginForm";
+import Home from "./pages/HomePage";
+import Register from "./pages/RegisterForm";
 
 const App = () => {
   return (
@@ -13,11 +13,9 @@ const App = () => {
 
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
+        <Route path="/contact" element={<Contact />} />
 
-        {/* Layout avec sidebar */}
-        <Route element={<MainLayout />}>
-          <Route path="/home" element={<Home />} />
-        </Route>
+        <Route path="/home" element={<Home />} />
       </Routes>
     </div>
   );

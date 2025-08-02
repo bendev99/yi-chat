@@ -13,10 +13,26 @@ const userSchema = new mongoose.Schema(
       unique: true,
     },
 
+    phone: {
+      type: String,
+      required: false,
+      unique: true,
+    },
+
     password: {
       type: String,
       required: true,
       minlength: 8,
+    },
+
+    gender: {
+      type: String,
+      enum: ["male", "female"],
+    },
+
+    profilePic: {
+      type: String,
+      default: "",
     },
   },
   { timestamps: true }

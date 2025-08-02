@@ -5,20 +5,23 @@ import generateToken from "../utils/generateToken.js";
 // Fonction pour la méthode d'inscription
 export const register = async (req, res) => {
   try {
-    const { name, email, password, repassword } = req.body;
+    const { name, email, phone, gender, password, confirmPassword } = req.body;
 
     // Verifier si les deux mot de passe correspondent
-    if (password !== repassword) {
+    if (password !== confirmPassword) {
       return res
         .status(400)
         .json({ error: "Les deux mot de passe ne correspond pas" });
     }
 
-    // Verifier si l'adresse email existe déjà
+    // Verifier si l'adresse email ou le numéro de téléphone existe déjà
     const user = await User.findOne({ email });
+    const userPhone = await User.findOne({ phone });
 
     if (user) {
       return res.status(400).json({ error: "Adresse email existe déjà" });
+    } else if (userPhone) {
+      return res.status(400).json({ error: "Numéro de téléphone existe déjà" });
     }
 
     // Crypté le mot de passe
@@ -29,6 +32,9 @@ export const register = async (req, res) => {
     const newUser = new User({
       name,
       email,
+      phone,
+      gender,
+      profilePic: `https://avatar.iran.liara.run/username?username=${name}`,
       password: cryptPassword,
     });
 
@@ -41,6 +47,9 @@ export const register = async (req, res) => {
         _id: newUser._id,
         name: newUser.name,
         email: newUser.email,
+        phone: newUser.phone,
+        gender: newUser.gender,
+        profilePic: newUser.profilePic,
         password: newUser.password,
       });
     } else {
@@ -77,7 +86,14 @@ export const login = async (req, res) => {
 
     generateToken(user._id, res);
 
-    res.status(200).json({ _id: user._id, name: user.name, email: user.email });
+    res.status(200).json({
+      _id: user._id,
+      name: user.name,
+      email: user.email,
+      phone: user.phone,
+      gender: user.gender,
+      profilePic: user.profilePic,
+    });
   } catch (error) {
     console.log("Erreur lors de la connexion : ", error.message);
     res.status(500).json({ error: "Erreur du serveur" });

@@ -178,7 +178,7 @@ const Login = () => {
               className="w-full bg-blue-800 hover:bg-blue-900 text-white font-medium py-2 px-4 rounded-lg transition duration-200 cursor-pointer"
             >
               <div className="items-center flex gap-5 justify-center">
-                <img src="/google.svg" alt="" className="w-5" />
+                {/* <img src="/assets/icons/google.svg" alt="" className="w-5" /> */}
                 Se connecter avec google
               </div>
             </button>
