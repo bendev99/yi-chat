@@ -2,10 +2,12 @@ import useGetMessages from "../../hooks/useGetMessages";
 import { TiMessageTyping } from "react-icons/ti";
 import Message from "./Message";
 import { useEffect, useRef } from "react";
+import useListenMessages from "../../hooks/useListenMessages";
 
 const Messages = () => {
   const { messages, loading } = useGetMessages();
   const lastMsgRef = useRef();
+  useListenMessages();
 
   useEffect(() => {
     lastMsgRef.current?.scrollIntoView({ behavior: "smooth" });

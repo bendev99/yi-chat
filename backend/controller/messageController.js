@@ -1,5 +1,6 @@
 import Conversation from "../models/conversationModel.js";
 import Message from "../models/messageModel.js";
+import { getReceiverSocketId, io } from "../socket/socket.js";
 
 export const sendMessage = async (req, res) => {
   try {
@@ -34,7 +35,14 @@ export const sendMessage = async (req, res) => {
     // Sauvegarde en parallèle
     await Promise.all([conversation.save(), newMessage.save()]);
 
-    res.status(201).json({ newMessage });
+    // SOCKET IO
+    const receiverSocketId = getReceiverSocketId(receiverId);
+    if (receiverSocketId) {
+      // io.to(<socket_id>).emit() => sert à envoyer des evenements à un client specifique
+      io.to(receiverSocketId).emit("newMessage", newMessage);
+    }
+
+    res.status(201).json(newMessage);
   } catch (error) {
     console.log("Erreur lors de l'envoi du message : ", error.message);
     res.status(500).json({ error: "Erreur du serveur interne" });
