@@ -64,7 +64,6 @@ const useRegister = () => {
 export default useRegister;
 
 function handleFormErrors({ name, email, phone, password, confirmPassword }) {
-  // Validation du nom
   if (
     !name.trim() ||
     !email.trim() ||

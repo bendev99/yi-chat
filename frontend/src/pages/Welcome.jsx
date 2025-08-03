@@ -69,7 +69,7 @@ const Welcome = () => {
       />
       {/* Section Hero */}
       <motion.div
-        className="hero min-h-screen bg-base-100 pt-16"
+        className="hero min-h-screen bg-base-100 p-15"
         initial="hidden"
         animate="visible"
         variants={heroVariants}
@@ -79,7 +79,7 @@ const Welcome = () => {
             className="text-6xl font-extrabold mb-6 tracking-tight"
             variants={heroVariants}
           >
-            Bienvenue sur <span className="text-accent uppercase">Koragna</span>
+            Bienvenue sur <span className="text-accent">YiChat</span>
           </motion.h1>
           <motion.p
             className="text-2xl mb-10 leading-relaxed opacity-90"
@@ -110,7 +110,7 @@ const Welcome = () => {
             transition={{ duration: 0.6, ease: "easeOut" }}
             viewport={{ once: true }}
           >
-            Pourquoi choisir KORAGNA ?
+            Pourquoi choisir <span className="text-accent">YiChat</span> ?
           </motion.h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {[

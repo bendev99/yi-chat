@@ -1,12 +1,12 @@
 import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { useNavigate } from "react-router-dom";
 import {
   EyeIcon,
   EyeSlashIcon,
   LockClosedIcon,
   UserIcon,
 } from "@heroicons/react/16/solid";
+import useLogin from "../hooks/useLogin";
 
 const Login = ({ isOpen, onClose }) => {
   const [formData, setFormData] = useState({
@@ -20,7 +20,7 @@ const Login = ({ isOpen, onClose }) => {
 
   const [showPassword, setShowPassword] = useState(false);
 
-  const navigate = useNavigate();
+  const { loading, login } = useLogin();
 
   const handlePassword = () => {
     setShowPassword(!showPassword);
@@ -40,40 +40,13 @@ const Login = ({ isOpen, onClose }) => {
     }
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    let hasErrors = false;
-    const newErrors = {
-      email: "",
-      password: "",
-    };
 
-    if (!formData.email.trim()) {
-      newErrors.email = "L'email est requis";
-      hasErrors = true;
-    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
-      newErrors.email = "Entrer une adresse email valide";
-      hasErrors = true;
-    }
-
-    if (!formData.password.trim()) {
-      newErrors.password = "Le mot de passe est requis";
-      hasErrors = true;
-    } else if (formData.password.length < 6) {
-      newErrors.password =
-        "Le mot de passe doit contenir au moins 6 caractères";
-      hasErrors = true;
-    }
-
-    setErrors(newErrors);
-
-    if (!hasErrors) {
-      console.log("Login submitted:", formData);
-      setFormData({ email: "", password: "" });
-      setErrors({ email: "", password: "" });
-      onClose();
-      navigate("/home");
-    }
+    await login({
+      email: formData.email,
+      password: formData.password,
+    });
   };
 
   const handleCancel = () => {
@@ -149,9 +122,9 @@ const Login = ({ isOpen, onClose }) => {
                 {errors.email && (
                   <p className="text-error text-sm mt-1">{errors.email}</p>
                 )}
-                <div className="validator-hint hidden text-base-content">
+                {/* <div className="validator-hint hidden text-base-content">
                   Entrer une adresse email valide
-                </div>
+                </div> */}
               </div>
 
               <div className="form-control">
@@ -183,9 +156,9 @@ const Login = ({ isOpen, onClose }) => {
                 {errors.password && (
                   <p className="text-error text-sm mt-1">{errors.password}</p>
                 )}
-                <div className="validator-hint hidden text-base-content">
+                {/* <div className="validator-hint hidden text-base-content">
                   Le mot de passe doit contenir au moins 6 caractères
-                </div>
+                </div> */}
               </div>
 
               <div className="flex justify-between items-center mt-6">
@@ -196,7 +169,7 @@ const Login = ({ isOpen, onClose }) => {
                 ></motion.div>
                 <div className="space-x-4">
                   <motion.button
-                    className="btn bg-base-300 text-base-content"
+                    className="btn bg-base-300 text-base-content w-[45%]"
                     onClick={handleCancel}
                     whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.95 }}
@@ -204,12 +177,16 @@ const Login = ({ isOpen, onClose }) => {
                     Annuler
                   </motion.button>
                   <motion.button
-                    className="btn btn-primary bg-base-300 text-base-content"
+                    className="btn btn-primary bg-base-300 text-base-content w-[45%]"
                     onClick={handleSubmit}
                     whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.95 }}
                   >
-                    Connexion
+                    {loading ? (
+                      <span className="loading loading-spinner"></span>
+                    ) : (
+                      "Connexion"
+                    )}
                   </motion.button>
                 </div>
               </div>

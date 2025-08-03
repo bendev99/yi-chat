@@ -79,9 +79,17 @@ export const login = async (req, res) => {
     );
 
     if (!user) {
-      return res.status(400).json({ error: "Adresse email incorrect" });
+      if (!email.trim()) {
+        return res.status(400).json({ error: "Tout les champs sont requis" });
+      } else {
+        return res.status(400).json({ error: "Adresse email incorrect" });
+      }
     } else if (!passVerification) {
-      return res.status(400).json({ error: "Mot de passe incorrect" });
+      if (!password.trim()) {
+        return res.status(400).json({ error: "Mot de passe requis" });
+      } else {
+        return res.status(400).json({ error: "Mot de passe incorrect" });
+      }
     }
 
     generateToken(user._id, res);

@@ -1,20 +1,32 @@
-const Conversation = () => {
+import useGetMessages from "../../hooks/useGetMessages";
+import useConversation from "../../zustand/useConversation";
+
+const Conversation = ({ conversation, lastIdx }) => {
+  const { selectedConversation, setSelectedConversation } = useConversation();
+  const { messages } = useGetMessages();
+  const isSelected = selectedConversation?._id === conversation._id;
+
   return (
-    <div className="flex gap-3 items-center hover:bg-slate-800 rounded p-2 py-1 cursor-pointer">
-      <div className="avatar avatar-online">
-        <div className="w-10 rounded-full">
-          <img src="https://img.daisyui.com/images/profile/demo/gordon@192.webp" />
+    <div className="flex flex-col -space-y-5">
+      <div
+        className={`flex gap-3 items-center hover:bg-slate-800 rounded-md px-2 py-5 cursor-pointer ${
+          isSelected ? "bg-slate-800" : ""
+        }`}
+        onClick={() => setSelectedConversation(conversation)}
+      >
+        <div className="avatar avatar-online">
+          <div className="w-10 rounded-full">
+            <img src={conversation.profilePic} />
+          </div>
+        </div>
+
+        <div className="flex flex-col flex-1">
+          <h3>{conversation.name}</h3>
+          <p className="text-sm text-slate-400">{messages.message}</p>
         </div>
       </div>
 
-      <div className="flex flex-col flex-1">
-        <h3>John Doe</h3>
-        <p className="text-xs text-gray-400">
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Quae, beatae.
-        </p>
-      </div>
-
-      <div className="divider my-0 py-0 h-1"></div>
+      {!lastIdx && <div className="divider w-full mx-auto opacity-20"></div>}
     </div>
   );
 };

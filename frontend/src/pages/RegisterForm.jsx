@@ -255,9 +255,9 @@ const Register = ({ isOpen, onClose }) => {
                 {errors.email && (
                   <p className="text-error text-sm mt-1">{errors.email}</p>
                 )}
-                <div className="validator-hint hidden text-base-content">
+                {/* <div className="validator-hint hidden text-base-content">
                   Entrer une adresse email valide
-                </div>
+                </div> */}
               </div>
 
               {/* CHAMP POUR TELEPHONE */}

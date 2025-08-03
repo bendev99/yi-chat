@@ -2,7 +2,9 @@ const NavBar = ({ onContactClick, onConnexionClick }) => {
   return (
     <div className="navbar bg-base-100 text-base-content fixed top-0 w-full z-30 shadow-md px-10">
       <div className="flex-1">
-        <a className="text-xl font-bold uppercase">Koragna</a>
+        <a className="text-3xl font-bold">
+          <span className="text-accent">YiChat</span>
+        </a>
       </div>
       <div className="flex gap-5">
         <button className="cursor-pointer" onClick={onContactClick}>

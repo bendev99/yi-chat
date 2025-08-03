@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import { useAuthContext } from "./AuthContext";
 import toast from "react-hot-toast";
+import { useAuthContext } from "../context/AuthContext";
 
 const useLogout = () => {
   const [loading, setLoading] = useState(false);
