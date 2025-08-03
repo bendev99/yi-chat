@@ -1,290 +1,398 @@
-import { EyeSlashIcon } from "@heroicons/react/16/solid";
-import { EyeIcon } from "lucide-react";
-import { useState } from "react";
-import { NavLink, useNavigate } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import {
+  AtSymbolIcon,
+  EyeIcon,
+  EyeSlashIcon,
+  LockClosedIcon,
+  PhoneIcon,
+  UserIcon,
+} from "@heroicons/react/16/solid";
+import GenderChoose from "../components/GenderChoose";
+import useRegister from "../hooks/useRegister";
+import { useNavigate } from "react-router-dom";
+import { useAuthContext } from "../context/AuthContext";
 
-const Register = () => {
-  const navigate = useNavigate();
-
-  // État pour la visibilité des mots de passe
-  const [showPassword, setShowPassword] = useState(false);
-  const [showRePassword, setShowRePassword] = useState(false);
-
-  // Basculer la visibilité des mots de passe
-  const togglePasswordVisibility = () => {
-    setShowPassword(!showPassword);
-  };
-  const toggleRePasswordVisibility = () => {
-    setShowRePassword(!showRePassword);
-  };
-
-  // États pour les valeurs du formulaire
+const Register = ({ isOpen, onClose }) => {
   const [formData, setFormData] = useState({
     name: "",
     email: "",
+    phone: "",
     password: "",
-    repassword: "",
+    confirmPassword: "",
+    gender: "",
   });
-
-  // États pour les erreurs
   const [errors, setErrors] = useState({
     name: "",
     email: "",
+    phone: "",
     password: "",
-    repassword: "",
+    confirmPassword: "",
   });
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
-  // Validation en temps réel
-  const validateField = (name, value) => {
-    let error = "";
+  const navigate = useNavigate();
+  const { authUser } = useAuthContext();
 
-    switch (name) {
-      case "name":
-        if (!value) error = "Veuillez entrer votre nom";
-        else if (value.length < 5)
-          error = "Le nom doit contenir au moins 5 caractères";
-        break;
-
-      case "email":
-        if (!value) error = "Adresse email obligatoire";
-        else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value))
-          error = "Email invalide";
-        break;
-
-      case "password":
-        if (!value) error = "Mot de passe requis";
-        else if (value.length < 6)
-          error = "Le mot de passe doit contenir au moins 6 caractères";
-        break;
-
-      case "repassword":
-        if (!value) error = "Champ requis !";
-        else if (value != formData.password)
-          error = "Les deux mots de passe sont différents";
-        break;
-
-      default:
-        break;
-    }
-
-    return error;
-  };
-
-  // Gestion des changements
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-
-    setFormData({
-      ...formData,
-      [name]: value,
-    });
-  };
-
-  // Soumission du formulaire
-  const handleSubmit = (e) => {
-    e.preventDefault();
-
-    // Valider tous les champs avant soumission
-    const newErrors = {
-      name: validateField("name", formData.name),
-      email: validateField("email", formData.email),
-      password: validateField("password", formData.password),
-      repassword: validateField("repassword", formData.repassword),
-    };
-
-    setErrors(newErrors);
-
-    // Vérifier si le formulaire est valide
-    const isValid = Object.values(newErrors).every((error) => error === "");
-
-    if (isValid) {
-      console.log("Formulaire valide:", formData);
-      setFormData({ name: "", email: "", password: "", repassword: "" });
-      setErrors({ name: "", email: "", password: "", repassword: "" });
-
+  useEffect(() => {
+    if (authUser) {
       navigate("/home");
     }
+  }, [authUser, navigate]);
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+
+    // Validation pour le champ "name"
+    if (name === "name") {
+      if (!value.trim()) {
+        setErrors((prev) => ({ ...prev, name: "Le nom est requis" }));
+      } else if (value.length < 4) {
+        setErrors((prev) => ({
+          ...prev,
+          name: "Le nom doit contenir au moins 4 caractères",
+        }));
+      } else if (!/^[A-Za-zÀ-ÿ\s'-]{4,60}$/.test(value)) {
+        setErrors((prev) => ({
+          ...prev,
+          name: "Le nom ne peut contenir que des lettres, espaces, apostrophes ou tirets",
+        }));
+      } else {
+        setErrors((prev) => ({ ...prev, name: "" }));
+      }
+    }
+
+    // Validation pour le champ "email"
+    else if (name === "email") {
+      if (!value.trim()) {
+        setErrors((prev) => ({ ...prev, email: "L'email est requis" }));
+      } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) {
+        setErrors((prev) => ({
+          ...prev,
+          email: "Entrer une adresse email valide",
+        }));
+      } else {
+        setErrors((prev) => ({ ...prev, email: "" }));
+      }
+    }
+
+    // Validation pour le champ "phone"
+    else if (name === "phone") {
+      if (!value.trim()) {
+        setErrors((prev) => ({
+          ...prev,
+          phone: "Le numéro de téléphone est requis",
+        }));
+      } else if (!/^[0-9]{10}$/.test(value)) {
+        setErrors((prev) => ({
+          ...prev,
+          phone: "Entrer un numéro de téléphone valide",
+        }));
+      } else {
+        setErrors((prev) => ({ ...prev, phone: "" }));
+      }
+    }
+
+    // Validation pour le champ "password"
+    else if (name === "password") {
+      if (!value.trim()) {
+        setErrors((prev) => ({
+          ...prev,
+          password: "Le mot de passe est requis",
+        }));
+      } else if (value.length < 6) {
+        setErrors((prev) => ({
+          ...prev,
+          password: "Le mot de passe doit contenir au moins 6 caractères",
+        }));
+      } else {
+        setErrors((prev) => ({ ...prev, password: "" }));
+      }
+    }
+
+    // Validation pour le champ "confirmPassword"
+    else if (name === "confirmPassword") {
+      if (!value.trim()) {
+        setErrors((prev) => ({
+          ...prev,
+          confirmPassword: "La confirmation du mot de passe est requise",
+        }));
+      } else if (value !== formData.password) {
+        setErrors((prev) => ({
+          ...prev,
+          confirmPassword: "Les mots de passe ne correspondent pas",
+        }));
+      } else {
+        setErrors((prev) => ({ ...prev, confirmPassword: "" }));
+      }
+    }
   };
 
+  const handleChekChange = (gender) => {
+    setFormData({ ...formData, gender });
+  };
+
+  const { loading, signup } = useRegister();
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    await signup(formData);
+  };
+
+  const handleCancel = () => {
+    setFormData({
+      name: "",
+      email: "",
+      phone: "",
+      password: "",
+      confirmPassword: "",
+      gender: "",
+    });
+    setErrors({
+      name: "",
+      email: "",
+      phone: "",
+      password: "",
+      confirmPassword: "",
+    });
+    onClose();
+  };
+
+  const modalVariants = {
+    hidden: { opacity: 0, scale: 0.8 },
+    visible: {
+      opacity: 1,
+      scale: 1,
+      transition: { duration: 0.3, ease: "easeOut" },
+    },
+    exit: {
+      opacity: 0,
+      scale: 0.8,
+      transition: { duration: 0.2, ease: "easeIn" },
+    },
+  };
+
+  const contentVariants = {
+    hidden: { opacity: 0, y: 20 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: { duration: 0.4, delay: 0.1, ease: "easeOut" },
+    },
+  };
   return (
-    <div className="bg-gradient-to-bl from-blue-800 to-cyan-400 min-h-screen flex items-center justify-center">
-      <div className="flex w-[80%] mx-auto my-auto">
-        <img
-          src="/register.svg"
-          alt="register img"
-          className="hidden md:block md:w-1/2"
-        />
-        <div className="w-full md:w-1/2 max-h-screen p-5 items-center justify-center my-auto mx-auto">
-          <form
-            onSubmit={handleSubmit}
-            className="p-6 bg-white rounded-lg shadow-xl shadow-cyan-950"
+    <AnimatePresence>
+      {isOpen && (
+        <motion.div
+          className="modal modal-open fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center"
+          variants={modalVariants}
+          initial="hidden"
+          animate="visible"
+          exit="exit"
+        >
+          <motion.div
+            className="modal-box bg-base-200 text-base-content relative"
+            variants={contentVariants}
           >
-            <h1 className="text-center font-bold text-3xl uppercase">
+            <motion.button
+              className="btn btn-sm btn-circle absolute right-2 top-2"
+              onClick={onClose}
+              whileHover={{ scale: 1.1 }}
+              whileTap={{ scale: 0.9 }}
+            >
+              ✕
+            </motion.button>
+            <h3 className="text-xl font-bold text-center mb-4 uppercase">
               Inscription
-            </h1>
+            </h3>
+            <div className="space-y-4">
+              {/* CHAMP POUR LE NOM */}
+              <div className="form-control">
+                <span className="label text-base-content">Nom</span>
+                <label className="input validator w-full bg-base-100 text-base-content flex items-center">
+                  <UserIcon className="w-5 h-5 fill-gray-500" />
+                  <input
+                    type="text"
+                    name="name"
+                    value={formData.name}
+                    onChange={handleInputChange}
+                    required
+                    placeholder="Entrer votre nom"
+                    pattern="[A-Za-zÀ-ÿ' -]*"
+                    minLength="4"
+                    maxLength="60"
+                    title="Seulement des lettres (y compris accentuées), espaces, apostrophes ou tirets (4-60 caractères)"
+                    className="bg-base-100 text-base-content w-full"
+                  />
+                </label>
+                {errors.name && (
+                  <p className="text-error text-sm mt-1">{errors.name}</p>
+                )}
+                <p className="validator-hint hidden text-base-content">
+                  Entrer votre vrai nom (au moins 4 caractères, lettres y
+                  compris accentuées, espaces, apostrophes ou tirets)
+                </p>
+              </div>
 
-            {/* Champ pour le nom */}
-            <div className={`flex flex-col ${errors.name ? "" : "mb-1"}`}>
-              <label htmlFor="name" className="text-gray-600">
-                Nom
-              </label>
-              <input
-                type="text"
-                name="name"
-                id="name"
-                placeholder="Entrer votre nom"
-                value={formData.name}
-                onChange={handleChange}
-                className={`w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring placeholder:text-sm ${
-                  errors.name
-                    ? "border-red-500 focus:ring-red-200 -mb-1"
-                    : "border-gray-300 focus:ring-blue-200 focus:border-blue-500"
-                }`}
-              />
-              {errors.name && (
-                <p className="ml-1 text-red-500 text-xs mt-1">{errors.name}</p>
-              )}
-            </div>
+              {/* CHAMP POUR L'EMAIL */}
+              <div className="form-control">
+                <span className="label text-base-content">Adresse email</span>
+                <label className="input validator w-full bg-base-100 text-base-content flex items-center">
+                  <AtSymbolIcon className="w-5 h-5 fill-gray-500" />
+                  <input
+                    type="email"
+                    name="email"
+                    value={formData.email}
+                    onChange={handleInputChange}
+                    placeholder="exemple@gmail.com"
+                    required
+                    className="bg-base-100 text-base-content w-full"
+                  />
+                </label>
+                {errors.email && (
+                  <p className="text-error text-sm mt-1">{errors.email}</p>
+                )}
+                {/* <div className="validator-hint hidden text-base-content">
+                  Entrer une adresse email valide
+                </div> */}
+              </div>
 
-            {/* Champ pour l'adresse email */}
-            <div className={`flex flex-col ${errors.email ? "" : "mb-1"}`}>
-              <label htmlFor="email" className="text-gray-600">
-                Adresse email
-              </label>
-              <input
-                type="email"
-                name="email"
-                id="email"
-                placeholder="exemple@gmail.com"
-                value={formData.email}
-                onChange={handleChange}
-                className={`w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring placeholder:text-sm ${
-                  errors.email
-                    ? "border-red-500 focus:ring-red-200 -mb-1"
-                    : "border-gray-300 focus:ring-blue-200 focus:border-blue-500"
-                }`}
-              />
-              {errors.email && (
-                <p className="ml-1 text-red-500 text-xs mt-1">{errors.email}</p>
-              )}
-            </div>
+              {/* CHAMP POUR TELEPHONE */}
+              <div className="form-control">
+                <span className="label text-base-content">
+                  Numéro de téléphone
+                </span>
+                <label className="input validator w-full bg-base-100 text-base-content flex items-center">
+                  <PhoneIcon className="w-5 h-5 fill-gray-500" />
+                  <input
+                    type="tel"
+                    name="phone" // Identifie le champ dans handleInputChange
+                    value={formData.phone} // Lie la valeur à l'état formData.phone
+                    onChange={handleInputChange} // Déclenche handleInputChange à chaque saisie
+                    className="tabular-nums"
+                    required
+                    placeholder="Phone"
+                    pattern="[0-9]*"
+                    minLength="10"
+                    maxLength="10"
+                    title="Must be 10 digits"
+                  />
+                </label>
+                {errors.phone && (
+                  <p className="text-error text-sm">{errors.phone}</p>
+                )}
+              </div>
 
-            {/* Champ pour le mot de passe */}
-            <div className={`${errors.password ? "mb-3" : "mb-1"}`}>
-              <label htmlFor="password" className="text-gray-600 mb-2">
-                Mot de passe
-              </label>
-              <div className="relative">
-                <input
-                  type={showPassword ? "text" : "password"}
-                  id="password"
-                  name="password"
-                  placeholder="Entrer votre mot de passe"
-                  value={formData.password}
-                  onChange={handleChange}
-                  className={`w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring placeholder:text-sm ${
-                    errors.password
-                      ? "border-red-500 focus:ring-red-200"
-                      : "border-gray-300 focus:ring-blue-200 focus:border-blue-500"
-                  }`}
-                />
+              {/* CHAMP POUR LE MOT DE PASSE */}
+              <div className="form-control">
+                <span className="label text-base-content">Mot de passe</span>
+                <label className="input validator w-full bg-base-100 text-base-content flex items-center">
+                  <LockClosedIcon className="w-5 h-5 fill-gray-500" />
+                  <input
+                    type={showPassword ? "text" : "password"}
+                    name="password"
+                    value={formData.password}
+                    onChange={handleInputChange}
+                    placeholder="Entrer votre mot de passe"
+                    required
+                    minLength="6"
+                    className="bg-base-100 text-base-content w-full"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowPassword(!showPassword)}
+                    className="text-sm mt-1"
+                  >
+                    {showPassword ? (
+                      <EyeSlashIcon className="h-5 w-5 text-gray-500 cursor-pointer" />
+                    ) : (
+                      <EyeIcon className="h-5 w-5 text-gray-500 cursor-pointer" />
+                    )}
+                  </button>
+                </label>
                 {errors.password && (
-                  <p className="absolute left-1 top-full text-red-500 text-xs">
-                    {errors.password}
+                  <p className="text-error text-sm mt-1">{errors.password}</p>
+                )}
+                <div className="validator-hint hidden text-base-content">
+                  Le mot de passe doit contenir au moins 6 caractères
+                </div>
+              </div>
+
+              {/* CHAMP POUR LA CONFIRMATION DU MOT DE PASSE */}
+              <div className="form-control">
+                <span className="label text-base-content">
+                  Confirmer le mot de passe
+                </span>
+                <label className="input validator w-full bg-base-100 text-base-content flex items-center">
+                  <LockClosedIcon className="w-5 h-5 fill-gray-500" />
+                  <input
+                    type={showConfirmPassword ? "text" : "password"}
+                    name="confirmPassword"
+                    value={formData.confirmPassword}
+                    onChange={handleInputChange}
+                    placeholder="Confirmer votre mot de passe"
+                    required
+                    className="bg-base-100 text-base-content w-full"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                    className="text-sm mt-1"
+                  >
+                    {showConfirmPassword ? (
+                      <EyeSlashIcon className="h-5 w-5 text-gray-500 cursor-pointer" />
+                    ) : (
+                      <EyeIcon className="h-5 w-5 text-gray-500 cursor-pointer" />
+                    )}
+                  </button>
+                </label>
+                {errors.confirmPassword && (
+                  <p className="text-error text-sm mt-1">
+                    {errors.confirmPassword}
                   </p>
                 )}
-                <button
-                  type="button"
-                  onClick={togglePasswordVisibility}
-                  className="absolute inset-y-0 right-0 pr-3 flex items-center"
-                  aria-label={
-                    showPassword
-                      ? "Masquer le mot de passe"
-                      : "Afficher le mot de passe"
-                  }
+                <div className="validator-hint hidden text-base-content">
+                  Doit correspondre au mot de passe
+                </div>
+              </div>
+
+              {/* CHECK BOX */}
+              <GenderChoose
+                onCheckChange={handleChekChange}
+                selectedGender={formData.gender}
+              />
+
+              {/* BOUTTON SOUMMISSION */}
+              <div className="flex justify-end space-x-4 mt-6">
+                <motion.button
+                  className="btn bg-base-300 text-base-content w-[30%]"
+                  onClick={handleCancel}
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
                 >
-                  {showPassword ? (
-                    <EyeSlashIcon className="h-5 w-5 text-gray-500 cursor-pointer" />
+                  Annuler
+                </motion.button>
+                <motion.button
+                  className="btn btn-primary bg-base-300 text-base-content w-[30%]"
+                  onClick={handleSubmit}
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                >
+                  {loading ? (
+                    <span className="loading loading-spinner"></span>
                   ) : (
-                    <EyeIcon className="h-5 w-5 text-gray-500 cursor-pointer" />
+                    "Inscription"
                   )}
-                </button>
+                </motion.button>
               </div>
             </div>
-
-            {/* Champ pour confirmation mot de passe */}
-            <div className={`${errors.password ? "mb-5" : "mb-5"}`}>
-              <label htmlFor="password" className="text-gray-600 mb-2">
-                Confirmer votre mot de passe
-              </label>
-              <div className="relative">
-                <input
-                  type={showRePassword ? "text" : "password"}
-                  id="repassword"
-                  name="repassword"
-                  placeholder="Repeter votre mot de passe"
-                  value={formData.repassword}
-                  onChange={handleChange}
-                  className={`w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring placeholder:text-sm ${
-                    errors.repassword
-                      ? "border-red-500 focus:ring-red-200"
-                      : "border-gray-300 focus:ring-blue-200 focus:border-blue-500"
-                  }`}
-                />
-                {errors.repassword && (
-                  <p className="absolute left-1 top-full text-red-500 text-xs">
-                    {errors.repassword}
-                  </p>
-                )}
-                <button
-                  type="button"
-                  onClick={toggleRePasswordVisibility}
-                  className="absolute inset-y-0 right-0 pr-3 flex items-center"
-                  aria-label={
-                    showRePassword
-                      ? "Masquer le mot de passe"
-                      : "Afficher le mot de passe"
-                  }
-                >
-                  {showRePassword ? (
-                    <EyeSlashIcon className="h-5 w-5 text-gray-500 cursor-pointer" />
-                  ) : (
-                    <EyeIcon className="h-5 w-5 text-gray-500 cursor-pointer" />
-                  )}
-                </button>
-              </div>
-            </div>
-
-            <button
-              type="submit"
-              className="w-full bg-blue-600 hover:bg-blue-800 text-white font-medium py-2 px-4 rounded-lg transition duration-200 cursor-pointer"
-            >
-              Créer un compte
-            </button>
-
-            <p className="text-center">ou</p>
-
-            {/* Bouton google */}
-            <button
-              type="submit"
-              className="w-full bg-blue-800 hover:bg-blue-900 text-white font-medium py-2 px-4 rounded-lg transition duration-200 cursor-pointer"
-            >
-              <div className="items-center flex gap-5 justify-center">
-                {/* <img src="/google.svg" alt="" className="w-5" /> */}
-                Continuer avec google
-              </div>
-            </button>
-
-            <p className="text-center mt-2 font-semibold">
-              Déjà membre ?{" "}
-              <span className="text-blue-600 cursor-pointer hover:underline">
-                <NavLink to="/login">Connexion</NavLink>
-              </span>
-            </p>
-          </form>
-        </div>
-      </div>
-    </div>
+          </motion.div>
+        </motion.div>
+      )}
+    </AnimatePresence>
   );
 };
 

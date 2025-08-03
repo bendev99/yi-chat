@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 
-const ContactForm = ({ isOpen, onClose }) => {
+const Contact = ({ isOpen, onClose }) => {
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -306,4 +306,4 @@ const ContactForm = ({ isOpen, onClose }) => {
   );
 };
 
-export default ContactForm;
+export default Contact;

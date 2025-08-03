@@ -2,9 +2,9 @@ import { useState } from "react";
 import { motion } from "framer-motion";
 
 import NavBar from "../components/NavBar";
-import ContactForm from "../components/ContactForm";
-import Login from "./LoginForm";
-import Register from "./RegisterForm";
+import Contact from "../components/Contact";
+import Login from "./Login";
+import Register from "./Register";
 
 const Welcome = () => {
   const [isContactOpen, setIsContactOpen] = useState(false);
@@ -195,7 +195,7 @@ const Welcome = () => {
         </div>
       </motion.div>
 
-      <ContactForm isOpen={isContactOpen} onClose={handleCloseContact} />
+      <Contact isOpen={isContactOpen} onClose={handleCloseContact} />
       <Login isOpen={isLoginOpen} onClose={handleCloseLogin} />
       <Register isOpen={isRegisterOpen} onClose={handleCloseRegister} />
     </div>

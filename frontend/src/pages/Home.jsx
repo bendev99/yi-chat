@@ -1,9 +1,11 @@
-import Boutton from "../components/Boutton";
+import SideBar from "../components/sidebar/SideBar";
+import MessageContainer from "../components/messages/MessageContainer";
 
 const Home = () => {
   return (
-    <div className={`md:ml-[22%] transition-all duration-300`}>
-      <Boutton />
+    <div className="flex px-25 py-10 h-screen bg-base-100 text-base-content overflow-hidden">
+      <SideBar />
+      <MessageContainer />
     </div>
   );
 };
