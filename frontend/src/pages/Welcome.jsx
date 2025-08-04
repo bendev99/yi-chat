@@ -11,26 +11,6 @@ const Welcome = () => {
   const [isLoginOpen, setIsLoginOpen] = useState(false);
   const [isRegisterOpen, setIsRegisterOpen] = useState(false);
 
-  const handleContactClick = () => {
-    setIsContactOpen(true);
-  };
-  const handleConnectClick = () => {
-    setIsLoginOpen(true);
-  };
-  const handleRegisterClick = () => {
-    setIsRegisterOpen(true);
-  };
-
-  const handleCloseContact = () => {
-    setIsContactOpen(false);
-  };
-  const handleCloseLogin = () => {
-    setIsLoginOpen(false);
-  };
-  const handleCloseRegister = () => {
-    setIsRegisterOpen(false);
-  };
-
   // Animation variants pour la section Hero
   const heroVariants = {
     hidden: { opacity: 0, y: 50 },
@@ -62,27 +42,29 @@ const Welcome = () => {
   };
 
   return (
-    <div className="min-h-screen bg-base-100 text-base-content">
+    <div className="min-h-screen bg-base-100 text-base-content md:pt-15 md:pb-5">
       <NavBar
-        onContactClick={handleContactClick}
-        onConnexionClick={handleConnectClick}
+        onContactClick={() => setIsContactOpen(true)}
+        onConnexionClick={() => setIsLoginOpen(true)}
       />
+
       {/* Section Hero */}
       <motion.div
-        className="hero min-h-screen bg-base-100 p-15"
+        className="flex flex-col gap-5 min-h-screen bg-base-100 shadow-md shadow-slate-950 p-20 md:p-25 md:mx-10 mx:mt-20 rounded-xl"
         initial="hidden"
         animate="visible"
         variants={heroVariants}
       >
-        <div className="hero-content text-center text-base-content flex flex-col">
+        {/* Section Bienvenue */}
+        <section className="flex flex-col hero-content text-base-content text-center">
           <motion.h1
-            className="text-6xl font-extrabold mb-6 tracking-tight"
+            className="text-3xl md:text-6xl font-extrabold mb-6 tracking-tight"
             variants={heroVariants}
           >
             Bienvenue sur <span className="text-accent">YiChat</span>
           </motion.h1>
           <motion.p
-            className="text-2xl mb-10 leading-relaxed opacity-90"
+            className="text-xl mb-10 leading-relaxed opacity-90"
             variants={heroVariants}
           >
             Connectez-vous instantanément avec vos proches et collègues. Chat
@@ -90,114 +72,117 @@ const Welcome = () => {
             une interface élégante.
           </motion.p>
           <motion.button
-            onClick={() => handleRegisterClick()}
+            onClick={() => setIsRegisterOpen(true)}
             className="btn btn-accent btn-lg"
             whileHover={{ scale: 1.05, transition: { duration: 0.3 } }}
             whileTap={{ scale: 0.95 }}
           >
             Créer un compte
           </motion.button>
-        </div>
-      </motion.div>
+        </section>
 
-      {/* Section Fonctionnalités */}
-      <div className="py-20 bg-base-100 text-base-content shadow-md shadow-black m-16 rounded-2xl">
-        <div className="container mx-auto px-4">
-          <motion.h2
-            className="text-4xl font-bold text-center mb-16"
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, ease: "easeOut" }}
-            viewport={{ once: true }}
-          >
-            Pourquoi choisir <span className="text-accent">YiChat</span> ?
-          </motion.h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {[
-              {
-                title: "Chat Texte",
-                description:
-                  "Échangez des messages en temps réel avec une interface intuitive et rapide.",
-                image: "/assets/images/texto.svg",
-              },
-              {
-                title: "Partage de Fichiers",
-                description:
-                  "Envoyez des photos, vidéos et documents en toute sécurité et simplicité.",
-                image: "/assets/images/media.svg",
-              },
-              {
-                title: "Appels Vidéo",
-                description:
-                  "Profitez d'appels vidéo haute définition pour rester proche de vos contacts.",
-                image: "/assets/images/video_call.svg",
-              },
-            ].map((feature, index) => (
-              <motion.div
-                key={index}
-                className="card bg-base-300 text-base-content shadow-xl"
-                custom={index}
-                initial="hidden"
-                whileInView="visible"
-                variants={cardVariants}
-                viewport={{ once: true }}
-                whileHover={{ y: -8, transition: { duration: 0.3 } }}
-              >
-                <figure>
-                  <img
-                    src={feature.image}
-                    alt={feature.title}
-                    className="h-48 w-full object-cover"
-                  />
-                </figure>
-                <div className="card-body">
-                  <h3 className="card-title text-base-content">
-                    {feature.title}
-                  </h3>
-                  <p>{feature.description}</p>
-                </div>
-              </motion.div>
-            ))}
+        {/* Section Fonctionnalités */}
+        <section className="py-15 md:my-16 bg-base-100 text-base-content shadow-md rounded-2xl">
+          <div className="container mx-auto px-2 md:px-4">
+            <motion.h2
+              className="text-2xl font-bold text-center mb-6 md:mb-16"
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, ease: "easeOut" }}
+              viewport={{ once: true }}
+            >
+              Pourquoi choisir <span className="text-accent">YiChat</span> ?
+            </motion.h2>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-5 md:gap-8">
+              {[
+                {
+                  title: "Chat Texte",
+                  description:
+                    "Échangez des messages en temps réel avec une interface intuitive et rapide.",
+                  image: "/assets/images/texto.svg",
+                },
+                {
+                  title: "Partage de Fichiers",
+                  description:
+                    "Envoyez des photos, vidéos et documents en toute sécurité et simplicité.",
+                  image: "/assets/images/media.svg",
+                },
+                {
+                  title: "Appels Vidéo",
+                  description:
+                    "Profitez d'appels vidéo haute définition pour rester proche de vos contacts.",
+                  image: "/assets/images/video_call.svg",
+                },
+              ].map((feature, index) => (
+                <motion.div
+                  key={index}
+                  className="card bg-base-300 text-base-content shadow-xl"
+                  custom={index}
+                  initial="hidden"
+                  whileInView="visible"
+                  variants={cardVariants}
+                  viewport={{ once: true }}
+                  whileHover={{ y: -8, transition: { duration: 0.3 } }}
+                >
+                  <figure>
+                    <img
+                      src={feature.image}
+                      alt={feature.title}
+                      className="h-40 md:h-52 w-full object-cover"
+                    />
+                  </figure>
+                  <div className="card-body">
+                    <h3 className="card-title text-base-content">
+                      {feature.title}
+                    </h3>
+                    <p>{feature.description}</p>
+                  </div>
+                </motion.div>
+              ))}
+            </div>
           </div>
-        </div>
-      </div>
+        </section>
 
-      {/* Section Call-to-Action */}
-      <motion.div
-        className="py-20 bg-base-100 text-base-content"
-        initial="hidden"
-        whileInView="visible"
-        variants={ctaVariants}
-        viewport={{ once: true }}
-      >
-        <div className="container mx-auto px-4 text-center">
-          <motion.h2
-            className="text-4xl font-bold text-neutral-content mb-6"
-            variants={ctaVariants}
-          >
-            Prêt à rejoindre la conversation ?
-          </motion.h2>
-          <motion.p
-            className="text-xl text-neutral-content mb-8 opacity-90"
-            variants={ctaVariants}
-          >
-            Inscrivez-vous dès maintenant et découvrez une nouvelle façon de
-            communiquer.
-          </motion.p>
-          <motion.button
-            onClick={() => handleRegisterClick()}
-            className="btn btn-primary btn-lg"
-            whileHover={{ scale: 1.05, transition: { duration: 0.3 } }}
-            whileTap={{ scale: 0.95 }}
-          >
-            S'inscrire gratuitement
-          </motion.button>
-        </div>
+        {/* Section Call-to-Action */}
+        <motion.section
+          className="py-20 bg-base-100 text-base-content"
+          initial="hidden"
+          whileInView="visible"
+          variants={ctaVariants}
+          viewport={{ once: true }}
+        >
+          <div className="container mx-auto px-4 text-center">
+            <motion.h2
+              className="text-4xl font-bold text-neutral-content mb-6"
+              variants={ctaVariants}
+            >
+              Prêt à rejoindre la conversation ?
+            </motion.h2>
+            <motion.p
+              className="text-xl text-neutral-content mb-8 opacity-90"
+              variants={ctaVariants}
+            >
+              Inscrivez-vous dès maintenant et découvrez une nouvelle façon de
+              communiquer.
+            </motion.p>
+            <motion.button
+              onClick={() => setIsRegisterOpen(true)}
+              className="btn btn-primary btn-lg"
+              whileHover={{ scale: 1.05, transition: { duration: 0.3 } }}
+              whileTap={{ scale: 0.95 }}
+            >
+              S'inscrire gratuitement
+            </motion.button>
+          </div>
+        </motion.section>
       </motion.div>
 
-      <Contact isOpen={isContactOpen} onClose={handleCloseContact} />
-      <Login isOpen={isLoginOpen} onClose={handleCloseLogin} />
-      <Register isOpen={isRegisterOpen} onClose={handleCloseRegister} />
+      <Contact isOpen={isContactOpen} onClose={() => setIsContactOpen(false)} />
+      <Login isOpen={isLoginOpen} onClose={() => setIsLoginOpen(false)} />
+      <Register
+        isOpen={isRegisterOpen}
+        onClose={() => setIsRegisterOpen(false)}
+      />
     </div>
   );
 };
