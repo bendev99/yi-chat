@@ -43,6 +43,7 @@ Cette application de chat en temps réel utilise la puissance de **React**, **Ta
 
 5. **Lancer le serveur frontend**
    ```bash
+   cd frontend
    npm run dev
    ```
 
