@@ -3,6 +3,8 @@ import useConversation from "../../zustand/useConversation";
 import InputMsgSection from "./InputMsgSection";
 import Messages from "./Messages";
 import Welcome from "./Welcome";
+import { TiAttachment, TiPhone, TiVideo } from "react-icons/ti";
+import ThemeToggle from "../ThemeToggle";
 
 const MessageContainer = () => {
   const { selectedConversation, setSelectedConversation } = useConversation();
@@ -16,11 +18,12 @@ const MessageContainer = () => {
       ) : (
         <>
           {/* HEADER SECTION */}
-          <div className="bg-slate-700 px-4 py-2 mb-2 w-full">
-            <span className="label-text">To : </span>
-            <span className="text-gray-900 font-bold">
-              {selectedConversation.name}
-            </span>
+          <div className="flex items-center justify-between px-5 py-2 mb-2 w-full shadow-xs shadow-base-300 rounded-md bg-primary text-primary-content">
+            <div>
+              <span className="label-text uppercase">à : </span>
+              <span className="font-bold">{selectedConversation.name}</span>
+            </div>
+            <ThemeToggle />
           </div>
 
           {/* BODY */}

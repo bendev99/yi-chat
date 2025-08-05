@@ -6,7 +6,7 @@ const ConversationList = () => {
   console.log("Conversations:", conversations);
 
   return (
-    <div className="flex flex-col -space-y-5 overflow-auto h-[70%]">
+    <div className="flex flex-col -space-y-5 overflow-auto h-[70%] shadow-sm shadow-base-300 mr-5">
       {conversations.map((conversation, idx) => (
         <Conversation
           key={conversation._id}

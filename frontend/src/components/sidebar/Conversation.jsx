@@ -14,13 +14,13 @@ const Conversation = ({ conversation, lastIdx }) => {
   return (
     <div className="flex flex-col -space-y-5">
       <div
-        className={`flex gap-3 items-center hover:bg-slate-800 rounded-md px-2 py-5 cursor-pointer ${
-          isSelected ? "bg-slate-800" : ""
+        className={`flex gap-3 items-center hover:bg-base-300 rounded-md px-2 py-3 cursor-pointer ${
+          isSelected ? "bg-base-300" : ""
         }`}
         onClick={() => setSelectedConversation(conversation)}
       >
         <div className={`avatar ${isOnline ? "avatar-online" : ""}`}>
-          <div className="w-10 rounded-full">
+          <div className="w-8 rounded-full">
             <img src={conversation.profilePic} />
           </div>
         </div>

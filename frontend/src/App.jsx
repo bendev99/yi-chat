@@ -4,9 +4,20 @@ import Home from "./pages/Home";
 import { Toaster } from "react-hot-toast";
 import { useAuthContext } from "./context/AuthContext";
 import Contact from "./components/Contact";
+import { useEffect } from "react";
 
 const App = () => {
   const { authUser } = useAuthContext();
+
+  useEffect(() => {
+    const prefersDark = window.matchMedia(
+      "(prefers-color-scheme: dark)"
+    ).matches;
+    document.documentElement.setAttribute(
+      "data-theme",
+      prefersDark ? "dark" : "light"
+    );
+  }, []);
 
   return (
     <div className=" h-screen items-center justify-center">

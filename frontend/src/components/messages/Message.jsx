@@ -23,7 +23,7 @@ const Message = ({ message }) => {
 
       <div
         className={`chat-bubble text-white  ${
-          isSender ? "chat-bubble-primary" : "bg-bubble-secondary"
+          isSender ? "chat-bubble-primary" : "bg-base-300"
         }`}
       >
         {message.message}
