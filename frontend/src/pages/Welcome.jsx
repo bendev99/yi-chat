@@ -2,7 +2,7 @@ import { useState } from "react";
 import { motion } from "framer-motion";
 
 import NavBar from "../components/NavBar";
-import Contact from "../components/Contact";
+import Contact from "./Contact";
 import Login from "./Login";
 import Register from "./Register";
 
@@ -50,7 +50,7 @@ const Welcome = () => {
 
       {/* Section Hero */}
       <motion.div
-        className="flex flex-col gap-5 min-h-screen bg-base-100 shadow-md shadow-slate-950 p-20 md:p-25 md:mx-10 mx:mt-20 rounded-xl"
+        className="flex flex-col gap-5 min-h-screen bg-base-100 shadow-md shadow-success-content p-20 md:p-25 md:mx-10 mx:mt-20 rounded-xl"
         initial="hidden"
         animate="visible"
         variants={heroVariants}
@@ -64,7 +64,7 @@ const Welcome = () => {
             Bienvenue sur <span className="text-accent">YiChat</span>
           </motion.h1>
           <motion.p
-            className="text-xl mb-10 leading-relaxed opacity-90"
+            className="text-xl mb-10 leading-relaxed text-base-content/50"
             variants={heroVariants}
           >
             Connectez-vous instantanément avec vos proches et collègues. Chat
@@ -105,12 +105,14 @@ const Welcome = () => {
                   title: "Partage de Fichiers",
                   description:
                     "Envoyez des photos, vidéos et documents en toute sécurité et simplicité.",
+                  sousDesc: "En cours...",
                   image: "/assets/images/media.svg",
                 },
                 {
                   title: "Appels Vidéo",
                   description:
                     "Profitez d'appels vidéo haute définition pour rester proche de vos contacts.",
+                  sousDesc: "En cours...",
                   image: "/assets/images/video_call.svg",
                 },
               ].map((feature, index) => (
@@ -135,7 +137,13 @@ const Welcome = () => {
                     <h3 className="card-title text-base-content">
                       {feature.title}
                     </h3>
-                    <p>{feature.description}</p>
+                    <p className="text-base-content/60">
+                      {feature.description}
+                    </p>
+
+                    <p className="text-base-content/40 text-center">
+                      {feature.sousDesc}
+                    </p>
                   </div>
                 </motion.div>
               ))}
@@ -151,15 +159,15 @@ const Welcome = () => {
           variants={ctaVariants}
           viewport={{ once: true }}
         >
-          <div className="container mx-auto px-4 text-center">
+          <div className="container mx-auto py-10 text-center bg-base-200 rounded-2xl shadow-md">
             <motion.h2
-              className="text-4xl font-bold text-neutral-content mb-6"
+              className="text-4xl font-bold text-base-content mb-6"
               variants={ctaVariants}
             >
               Prêt à rejoindre la conversation ?
             </motion.h2>
             <motion.p
-              className="text-xl text-neutral-content mb-8 opacity-90"
+              className="text-xl text-base-content/50 mb-8 opacity-90"
               variants={ctaVariants}
             >
               Inscrivez-vous dès maintenant et découvrez une nouvelle façon de

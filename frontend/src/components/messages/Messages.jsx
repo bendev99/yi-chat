@@ -14,7 +14,7 @@ const Messages = () => {
   }, [messages]);
 
   return (
-    <div className="px-4 flex-1 overflow-auto mx-8">
+    <div className="md:px-4 flex-1 overflow-auto md:mx-8">
       {loading ? (
         <div className="flex justify-center items-center h-full">
           <span className="loading loading-spinner"></span>
@@ -22,8 +22,10 @@ const Messages = () => {
       ) : (
         messages.length === 0 && (
           <div className="flex flex-col justify-center items-center h-full">
-            <p className="text-gray-500">Aucun message trouvé.</p>
-            <TiMessageTyping className="w-10 h-10" />
+            <p className="text-base-content/50 md:text-xl">
+              Aucun message trouvé.
+            </p>
+            <TiMessageTyping className="w-10 h-10 text-base-content/50" />
           </div>
         )
       )}

@@ -1,6 +1,7 @@
 import { MdOutlineLogout, MdSettings } from "react-icons/md";
 import { useAuthContext } from "../../context/AuthContext";
 import useLogout from "../../hooks/useLogout";
+import ThemeToggle from "../ThemeToggle";
 
 const FooterSection = () => {
   const { loading, logout } = useLogout();
@@ -19,7 +20,7 @@ const FooterSection = () => {
       </div>
 
       <div className="flex gap-5 justify-end w-full">
-        <MdSettings className="w-6 h-6" />
+        <ThemeToggle />
         <div className="avatar w-6 rounded-full">
           <img src={authUser?.profilePic} alt="Profile" />
         </div>

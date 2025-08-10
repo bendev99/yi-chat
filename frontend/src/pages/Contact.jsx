@@ -15,6 +15,10 @@ const Contact = ({ isOpen, onClose }) => {
     message: "",
   });
 
+  const service_id = "service_9wrxqtf";
+  const template_id = "yichat_contact";
+  const public_key = "oYOMMJgqCBdlKZwD1";
+
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
@@ -38,9 +42,28 @@ const Contact = ({ isOpen, onClose }) => {
     }
   };
 
+  const sendEmail = (e) => {
+    e.preventDefault();
+    setLoading(true);
+
+    emailjs
+      .send("YOUR_SERVICE_ID", "YOUR_TEMPLATE_ID", formData, "YOUR_PUBLIC_KEY")
+      .then(() => {
+        setSuccess(true);
+        setFormData({ name: "", email: "", phone: "", message: "" });
+      })
+      .catch((error) => {
+        alert("Erreur lors de l’envoi du message. Réessaie.");
+        console.error(error);
+      })
+      .finally(() => setLoading(false));
+  };
+
   const handleSubmit = (e) => {
     e.preventDefault();
+
     let hasErrors = false;
+
     const newErrors = {
       name: "",
       email: "",
@@ -282,20 +305,21 @@ const Contact = ({ isOpen, onClose }) => {
 
               <div className="modal-action">
                 <motion.button
-                  className="btn btn-primary"
-                  onClick={handleSubmit}
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                >
-                  Envoyer
-                </motion.button>
-                <motion.button
                   className="btn"
                   onClick={onClose}
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
                 >
                   Annuler
+                </motion.button>
+
+                <motion.button
+                  className="btn btn-primary"
+                  onClick={handleSubmit}
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                >
+                  Envoyer
                 </motion.button>
               </div>
             </div>

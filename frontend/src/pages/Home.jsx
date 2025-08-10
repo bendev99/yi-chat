@@ -1,6 +1,6 @@
 import SideBar from "../components/sidebar/SideBar";
 import MessageContainer from "../components/messages/MessageContainer";
-import RightSide from "../components/rightside/RightSide";
+import RightSide from "../components/messages/RightSide";
 
 const Home = () => {
   return (

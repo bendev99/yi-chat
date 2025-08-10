@@ -33,11 +33,11 @@ const SearchSection = () => {
       <input
         type="text"
         placeholder="Recherche..."
-        className="input input-bordered rounded-full"
+        className="border text-sm rounded-full block w-full p-2 bg-base-100 border-primary text-base-content"
         value={search}
         onChange={(e) => setSearch(e.target.value)}
       />
-      <button type="submit" className="btn btn-circle bg-sky-300 text-white">
+      <button type="submit" className="btn btn-circle bg-secondary text-white">
         <MdSearch />
       </button>
     </form>

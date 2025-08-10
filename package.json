@@ -1,8 +1,8 @@
 {
-  "name": "koragna",
+  "name": "yichat",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "server.js",
   "scripts": {
     "server": "nodemon backend/server.js"
   },

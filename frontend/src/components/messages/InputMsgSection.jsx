@@ -8,19 +8,19 @@ const InputMsgSection = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!message.trim()) return; // Prevent sending empty messages
+    if (!message.trim()) return; // Envoi avec un champ vide
     await sendMessage(message);
-    console.log("Message sent:", message);
+    console.log("Message senvoyer :", message);
 
-    setMessage(""); // Clear input after sending
+    setMessage(""); // Netoyer l'input après l'envoi du message
   };
 
   return (
-    <form className="px-4 my-3" onSubmit={handleSubmit}>
-      <div className="w-[80%] relative mx-auto">
+    <form className="md:px-4" onSubmit={handleSubmit}>
+      <div className="w-[80%] fixed bottom-2 md:bottom-0 mx-auto md:relative">
         <input
           type="text"
-          className="border text-sm rounded-lg block w-full p-2.5 bg-gray-700 border-b-gray-600 text-white"
+          className="border text-sm rounded-lg block w-full p-2.5 bg-base-100 border-primary text-base-content"
           placeholder="Envoi un message"
           value={message}
           onChange={(e) => setMessage(e.target.value)}
