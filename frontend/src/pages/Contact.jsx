@@ -101,7 +101,8 @@ const Contact = ({ isOpen, onClose }) => {
           setLoading(false);
         });
     } else {
-      toast.error("Veuillez corriger les erreurs dans le formulaire.");
+      toast.error("Veuillez remplir tous les champs s'il vous plaît.");
+      setLoading(false);
     }
   };
 
