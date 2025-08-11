@@ -11,7 +11,7 @@ const useGetMessages = () => {
       setLoading(true);
 
       try {
-        const res = await fetch(`/api/messages/${selectedConversation._id}`);
+        const res = await fetch(`/messages/${selectedConversation._id}`);
         const data = await res.json();
 
         if (data.error) {

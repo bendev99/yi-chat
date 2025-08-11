@@ -99,21 +99,21 @@ const Welcome = () => {
                   title: "Chat Texte",
                   description:
                     "Échangez des messages en temps réel avec une interface intuitive et rapide.",
-                  image: "/assets/images/texto.svg",
+                  image: "/texto.svg",
                 },
                 {
                   title: "Partage de Fichiers",
                   description:
                     "Envoyez des photos, vidéos et documents en toute sécurité et simplicité.",
                   sousDesc: "En cours...",
-                  image: "/assets/images/media.svg",
+                  image: "/media.svg",
                 },
                 {
                   title: "Appels Vidéo",
                   description:
                     "Profitez d'appels vidéo haute définition pour rester proche de vos contacts.",
                   sousDesc: "En cours...",
-                  image: "/assets/images/video_call.svg",
+                  image: "/video_call.svg",
                 },
               ].map((feature, index) => (
                 <motion.div
