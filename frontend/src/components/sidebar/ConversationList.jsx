@@ -3,7 +3,6 @@ import Conversation from "./Conversation";
 
 const ConversationList = () => {
   const { loading, conversations } = useGetConversations();
-  console.log("Conversations:", conversations);
 
   return (
     <div className="flex flex-col -space-y-5 overflow-auto h-[70%] shadow-sm shadow-base-300 mr-5">

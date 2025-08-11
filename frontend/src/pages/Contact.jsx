@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import emailjs from "@emailjs/browser";
+import toast from "react-hot-toast";
 
 const Contact = ({ isOpen, onClose }) => {
   const [formData, setFormData] = useState({
@@ -15,102 +17,91 @@ const Contact = ({ isOpen, onClose }) => {
     message: "",
   });
 
+  const [loading, setLoading] = useState(false);
+
   const service_id = "service_9wrxqtf";
   const template_id = "yichat_contact";
   const public_key = "oYOMMJgqCBdlKZwD1";
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
+
+    // Mettre à jour formData
     setFormData((prev) => ({ ...prev, [name]: value }));
-    // Réinitialiser l'erreur du champ modifié si la valeur est valide
-    if (
-      name === "name" &&
-      value.trim() &&
-      /^[A-Za-zÀ-ÿ\s'-]{4,60}$/.test(value)
-    ) {
-      setErrors((prev) => ({ ...prev, name: "" }));
-    } else if (
-      name === "email" &&
-      value.trim() &&
-      /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)
-    ) {
-      setErrors((prev) => ({ ...prev, email: "" }));
-    } else if (name === "phone" && value.trim() && /^[0-9]{10}$/.test(value)) {
-      setErrors((prev) => ({ ...prev, phone: "" }));
-    } else if (name === "message" && value.trim()) {
-      setErrors((prev) => ({ ...prev, message: "" }));
-    }
-  };
 
-  const sendEmail = (e) => {
-    e.preventDefault();
-    setLoading(true);
+    // Validation en temps réel et définition des erreurs
+    const newErrors = { ...errors };
 
-    emailjs
-      .send("YOUR_SERVICE_ID", "YOUR_TEMPLATE_ID", formData, "YOUR_PUBLIC_KEY")
-      .then(() => {
-        setSuccess(true);
-        setFormData({ name: "", email: "", phone: "", message: "" });
-      })
-      .catch((error) => {
-        alert("Erreur lors de l’envoi du message. Réessaie.");
-        console.error(error);
-      })
-      .finally(() => setLoading(false));
-  };
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-
-    let hasErrors = false;
-
-    const newErrors = {
-      name: "",
-      email: "",
-      phone: "",
-      message: "",
-    };
-
-    // Validation du champ name
-    if (!formData.name.trim()) {
-      newErrors.name = "Le nom est requis";
-      hasErrors = true;
-    } else if (formData.name.length < 4) {
-      newErrors.name = "Le nom doit contenir au moins 4 lettres";
-      hasErrors = true;
-    }
-
-    // Validation du champ email
-    if (!formData.email.trim()) {
-      newErrors.email = "L'email est requis";
-      hasErrors = true;
-    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
-      newErrors.email = "Entrer une adresse email valide";
-      hasErrors = true;
-    }
-
-    // Validation du champ phone
-    if (!formData.phone.trim()) {
-      newErrors.phone = "Le numéro de téléphone est requis";
-      hasErrors = true;
-    } else if (!/^[0-9]{10}$/.test(formData.phone)) {
-      newErrors.phone = "Le numéro doit contenir exactement 10 chiffres";
-      hasErrors = true;
-    }
-
-    // Validation du champ message
-    if (!formData.message.trim()) {
-      newErrors.message = "Le message ne peut pas être vide";
-      hasErrors = true;
+    if (name === "name") {
+      if (!value.trim()) {
+        newErrors.name = "Le nom est requis";
+      } else if (value.length < 4) {
+        newErrors.name = "Le nom doit contenir au moins 4 lettres";
+      } else if (!/^[A-Za-zÀ-ÿ\s'-]{4,60}$/.test(value)) {
+        newErrors.name =
+          "Le nom doit contenir entre 4 et 60 lettres, espaces, apostrophes ou tirets";
+      } else {
+        newErrors.name = "";
+      }
+    } else if (name === "email") {
+      if (!value.trim()) {
+        newErrors.email = "L'email est requis";
+      } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) {
+        newErrors.email = "Entrer une adresse email valide";
+      } else {
+        newErrors.email = "";
+      }
+    } else if (name === "phone") {
+      if (!value.trim()) {
+        newErrors.phone = "Le numéro de téléphone est requis";
+      } else if (!/^[0-9]{10}$/.test(value)) {
+        newErrors.phone = "Le numéro doit contenir exactement 10 chiffres";
+      } else {
+        newErrors.phone = "";
+      }
+    } else if (name === "message") {
+      if (!value.trim()) {
+        newErrors.message = "Le message ne peut pas être vide";
+      } else {
+        newErrors.message = "";
+      }
     }
 
     setErrors(newErrors);
+  };
 
-    if (!hasErrors) {
-      console.log("Form submitted:", formData);
-      onClose();
-      setFormData({ name: "", email: "", phone: "", message: "" });
-      setErrors({ name: "", email: "", phone: "", message: "" });
+  // Fonction pour gérer la soumission du formulaire
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    setLoading(true);
+
+    // Vérifier s'il y a des erreurs
+    const dataCheck = Object.values(formData).every(
+      (value) => value.trim() !== ""
+    );
+
+    if (dataCheck) {
+      emailjs
+        .send(service_id, template_id, formData, public_key)
+        .then(
+          (response) => {
+            toast.success("Message envoyé avec succès !");
+
+            setFormData({ name: "", email: "", phone: "", message: "" });
+            onClose();
+          },
+          (error) => {
+            toast.error(
+              "Échec de l'envoi du message. Veuillez réessayer plus tard." +
+                error
+            );
+          }
+        )
+        .finally(() => {
+          setLoading(false);
+        });
+    } else {
+      toast.error("Veuillez corriger les erreurs dans le formulaire.");
     }
   };
 
@@ -189,17 +180,12 @@ const Contact = ({ isOpen, onClose }) => {
                     onChange={handleInputChange}
                     required
                     placeholder="Entrer votre nom"
-                    pattern="[A-Za-z]*"
-                    minLength="4"
                     title="Le nom doit contenir au moins 4 lettres"
                   />
                 </label>
                 {errors.name && (
                   <p className="text-error text-sm mt-1">{errors.name}</p>
                 )}
-                <p className="validator-hint hidden">
-                  Le nom doit contenir au moins 4 lettres
-                </p>
               </div>
 
               {/* CHAMP POUR L'EMAIL */}
@@ -235,9 +221,6 @@ const Contact = ({ isOpen, onClose }) => {
                 {errors.email && (
                   <p className="text-error text-sm mt-1">{errors.email}</p>
                 )}
-                <div className="validator-hint hidden">
-                  Entrer une adresse email valide
-                </div>
               </div>
 
               {/* CHAMP POUR LE TELEPHONE */}
@@ -270,7 +253,6 @@ const Contact = ({ isOpen, onClose }) => {
                     className="tabular-nums"
                     required
                     placeholder="Phone"
-                    pattern="[0-9]*"
                     minLength="10"
                     maxLength="10"
                     title="Entrer un numéro de téléphone valide"
@@ -279,7 +261,6 @@ const Contact = ({ isOpen, onClose }) => {
                 {errors.phone && (
                   <p className="text-error text-sm mt-1">{errors.phone}</p>
                 )}
-                <p className="validator-hint hidden">Must be 10 digits</p>
               </div>
 
               {/* CHAMP POUR LE MESSAGE */}
@@ -318,8 +299,13 @@ const Contact = ({ isOpen, onClose }) => {
                   onClick={handleSubmit}
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
+                  disabled={loading}
                 >
-                  Envoyer
+                  {loading ? (
+                    <span className="loading loading-spinner"></span>
+                  ) : (
+                    "Envoyer"
+                  )}
                 </motion.button>
               </div>
             </div>

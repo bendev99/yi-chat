@@ -10,7 +10,6 @@ const InputMsgSection = () => {
     e.preventDefault();
     if (!message.trim()) return; // Envoi avec un champ vide
     await sendMessage(message);
-    console.log("Message senvoyer :", message);
 
     setMessage(""); // Netoyer l'input après l'envoi du message
   };
